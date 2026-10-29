@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://cdlfggytovudj"]
+
+[ext_resource type="Script" uid="uid://df8811lspor0p" path="res://Scenes/Script/health_ui.gd" id="1_hmcqi"]
+[ext_resource type="Texture2D" uid="uid://bpwd7rtnwbiw3" path="res://Assets/Art/png-transparent-pixel-heart.png" id="2_cfxqm"]
+
+[node name="HealthUI" type="Control" unique_id=385231568]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hmcqi")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=553858434]
+modulate = Color(0.24212673, 0.3097263, 0.30794734, 0.45882353)
+layout_mode = 0
+offset_left = 11.0
+offset_top = 561.0
+offset_right = 460.99994
+offset_bottom = 1161.0
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_cfxqm")
+
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=950329714]
+layout_mode = 0
+offset_left = 12.999998
+offset_top = 557.0
+offset_right = 446.0
+offset_bottom = 1134.0
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_cfxqm")
+
+[node name="Label" type="Label" parent="." unique_id=978275295]
+layout_mode = 0
+offset_left = 54.0
+offset_top = 601.0
+offset_right = 94.0
+offset_bottom = 624.0
+text = "3"

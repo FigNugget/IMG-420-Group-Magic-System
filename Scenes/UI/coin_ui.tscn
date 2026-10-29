@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dvxcx81uqv5fe"]
+
+[ext_resource type="Script" uid="uid://b4rswb3rd1bfj" path="res://Scenes/Script/coin_ui.gd" id="1_hk6f3"]
+[ext_resource type="Texture2D" uid="uid://cagbnjraweiqf" path="res://Assets/Art/Coin_Gems/MonedaD.png" id="2_83q2o"]
+
+[node name="CoinUI" type="Control" unique_id=1923704794]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = 70.0
+offset_bottom = 70.0
+script = ExtResource("1_hk6f3")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1705773136]
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+texture = ExtResource("2_83q2o")
+expand_mode = 1
+stretch_mode = 1
+
+[node name="Label" type="Label" parent="." unique_id=900471173]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 3.0
+offset_right = 32.0
+offset_bottom = 26.0
+text = "0"
+horizontal_alignment = 1

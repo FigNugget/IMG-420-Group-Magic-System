@@ -1,0 +1,116 @@
+[gd_scene format=3 uid="uid://b14j8w5uho1sa"]
+
+[ext_resource type="Script" uid="uid://ce8fdskmo6wmq" path="res://Scenes/Script/coin.gd" id="1_6ldys"]
+[ext_resource type="Texture2D" uid="uid://cagbnjraweiqf" path="res://Assets/Art/Coin_Gems/MonedaD.png" id="2_s7ppx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_t3nji"]
+atlas = ExtResource("2_s7ppx")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c0egm"]
+atlas = ExtResource("2_s7ppx")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s54h5"]
+atlas = ExtResource("2_s7ppx")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oucd7"]
+atlas = ExtResource("2_s7ppx")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m3ray"]
+atlas = ExtResource("2_s7ppx")
+region = Rect2(64, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_17jnq"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_t3nji")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c0egm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s54h5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oucd7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m3ray")
+}],
+"loop": 1,
+"name": &"spin",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_17jnq"]
+radius = 8.0
+
+[sub_resource type="Animation" id="Animation_jgi06"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_g537i"]
+resource_name = "coin_float"
+length = 1.5
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(2, 2, 2),
+"points": PackedFloat32Array(0, -0.23652267, -3.9913201, 0.26666668, 4.5, -15, -0.1277778, 0, 0.12222222, 0, 0, -0.20000005, 0.5, 0.21666518, -0.5416628),
+"times": PackedFloat32Array(0, 0.75, 1.5)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_h2p6v"]
+_data = {
+&"RESET": SubResource("Animation_jgi06"),
+&"coin_float": SubResource("Animation_g537i")
+}
+
+[node name="coin" type="Node2D" unique_id=1451490080]
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_6ldys")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1431483871]
+sprite_frames = SubResource("SpriteFrames_17jnq")
+animation = &"spin"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=717336641]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1914019754]
+shape = SubResource("CircleShape2D_17jnq")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1707973213]
+libraries/ = SubResource("AnimationLibrary_h2p6v")
+autoplay = &"coin_float"
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
