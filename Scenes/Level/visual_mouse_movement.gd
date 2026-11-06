@@ -14,6 +14,9 @@ extends Panel
 enum State {DRAWING, NOT_DRAWING}
 @export var mouseState = State.NOT_DRAWING
 
+enum Spell {FIRE, WATER, EARTH, AIR}
+var spell: Spell
+
 var drawing_points: Array[Vector2] = []
 var mousePosition: Vector2
 var startMousePosition: Vector2
@@ -39,7 +42,10 @@ func _gui_input(event) -> void:
 
 			# Stop drawing
 			mouseState = State.NOT_DRAWING
-
+			# check type of drawing
+			spell = checkSpell()
+			# execute spell
+			castSpell(spell)
 			# Reset drawing
 			resetDrawing()
 
@@ -74,3 +80,22 @@ func _draw() -> void:
 			fireColor,
 			dot_size
 		)
+
+func castSpell(spell:int):
+	print(spell)
+	pass
+	
+func checkSpell():
+	# simplify (rdp alg)
+	
+	# get average of all ppooints
+	
+	# if all point distances are consistent among center
+		# circle
+	# if all point distances are changing consistently around center
+		# spiral
+	# if there are 3 big corners and 3 straight sides
+		# triangle
+	# if there are 4 big corners (90 degrees) and 4 straight sides
+		# square
+	pass
