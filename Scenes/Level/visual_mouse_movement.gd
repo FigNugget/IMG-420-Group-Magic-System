@@ -20,6 +20,7 @@ var spell: Spell
 var drawing_points: Array[Vector2] = []
 var mousePosition: Vector2
 var startMousePosition: Vector2
+@export_range(1.0, 30.0, 0.5) var rdpEpsilon := 5.0
 
 
 func _gui_input(event) -> void:
@@ -36,6 +37,9 @@ func _gui_input(event) -> void:
 
 				# Record starting position
 				startMousePosition = event.position
+				
+				# change color based on what shape 
+				color = recognizeShape()
 
 		# Check for left mouse button release
 		elif event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
@@ -43,7 +47,7 @@ func _gui_input(event) -> void:
 			# Stop drawing
 			mouseState = State.NOT_DRAWING
 			# check type of drawing
-			spell = checkSpell()
+			spell = recognizeShape()
 			# execute spell
 			castSpell(spell)
 			# Reset drawing
@@ -85,17 +89,46 @@ func castSpell(spell:int):
 	print(spell)
 	pass
 	
-func checkSpell():
-	# simplify (rdp alg)
+func recognizeShape(points:Array[Vector2]):
+
+	# Simplify the drawing
+	simplify = RDP(points)
+
+	# Get center of drawing
+	center = getCenter(points)
+
+	# Check for circle
+	if isCircle(points, center):
+		return CIRCLE
+
+	# Check for spiral
+	if isSpiral(points, center):
+		return SPIRAL
+
+	# Check for triangle
+	if isTriangle(simplified_points):
+		return TRIANGLE
+
+	# Check for square
+	if isSquare(simplified_points):
+		return SQUARE
+
+	return UNKNOWN
 	
-	# get average of all ppooints
+func RDP(points:Array[Vector2]):
+	# if theres only two points
+		# return points
+	# find the point w the greatest distance
+		# max dis
+		# intex
 	
-	# if all point distances are consistent among center
-		# circle
-	# if all point distances are changing consistently around center
-		# spiral
-	# if there are 3 big corners and 3 straight sides
-		# triangle
-	# if there are 4 big corners (90 degrees) and 4 straight sides
-		# square
+	# for loop to find max distance
+		# find vertical distance
+		# find horizontal distance
+		# find hypotenuse
+		# if hypo is > than max then replace
+		
+	# check if max dist is within epsilon
+	# split graph and recersive
+	# combine arrays and return array
 	pass
