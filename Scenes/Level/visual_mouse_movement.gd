@@ -10,19 +10,27 @@ extends Panel
 @export var waterColor := Color.SKY_BLUE
 @export var airColor := Color.ANTIQUE_WHITE
 @export var earthColor := Color.SADDLE_BROWN
+@export var unknownColor := Color.DIM_GRAY
 
 enum State {DRAWING, NOT_DRAWING}
 @export var mouseState = State.NOT_DRAWING
 
 enum Spell {FIRE, WATER, EARTH, AIR}
+enum Shape {TRIANGLE, CIRCLE, SQUARE, SPIRAL, UNKNOWN}
 var spell: Spell
+var simplifiedPoints: Array[Vector2] = []
 
-var drawing_points: Array[Vector2] = []
+var drawingPoints: Array[Vector2] = []
 var mousePosition: Vector2
 var startMousePosition: Vector2
 @export_range(1.0, 30.0, 0.5) var rdpEpsilon := 5.0
 
+var maxDistance: int
+var maxIndex: int
+var curDistance: int
 
+var color:= unknownColor
+var center:Vector2
 func _gui_input(event) -> void:
 
 	# Check if a mouse button was pressed or released
@@ -39,7 +47,7 @@ func _gui_input(event) -> void:
 				startMousePosition = event.position
 				
 				# change color based on what shape 
-				color = recognizeShape()
+				color = recognizeShape(drawingPoints)
 
 		# Check for left mouse button release
 		elif event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
@@ -47,7 +55,7 @@ func _gui_input(event) -> void:
 			# Stop drawing
 			mouseState = State.NOT_DRAWING
 			# check type of drawing
-			spell = recognizeShape()
+			spell = recognizeShape(drawingPoints)
 			# execute spell
 			castSpell(spell)
 			# Reset drawing
@@ -67,20 +75,20 @@ func _gui_input(event) -> void:
 				updateDrawing(mousePosition)
 				startMousePosition = mousePosition
 func resetDrawing() -> void:
-	drawing_points.clear()
+	drawingPoints.clear()
 	queue_redraw()
 	
 func updateDrawing(position:Vector2) -> void:
-	drawing_points.append(position)
+	drawingPoints.append(position)
 	queue_redraw()
 	
 func _draw() -> void:
-	if drawing_points.size()<2:
+	if drawingPoints.size()<2:
 		return
-	for i in range(drawing_points.size()-1):
+	for i in range(drawingPoints.size()-1):
 		draw_line(
-			drawing_points[i],
-			drawing_points[i+1],
+			drawingPoints[i],
+			drawingPoints[i+1],
 			fireColor,
 			dot_size
 		)
@@ -92,43 +100,67 @@ func castSpell(spell:int):
 func recognizeShape(points:Array[Vector2]):
 
 	# Simplify the drawing
-	simplify = RDP(points)
+	simplifiedPoints = RDP(points)
 
 	# Get center of drawing
 	center = getCenter(points)
 
 	# Check for circle
 	if isCircle(points, center):
-		return CIRCLE
+		return Shape.CIRCLE
 
 	# Check for spiral
 	if isSpiral(points, center):
-		return SPIRAL
+		return Shape.SPIRAL
 
 	# Check for triangle
-	if isTriangle(simplified_points):
-		return TRIANGLE
+	if isTriangle(simplifiedPoints):
+		return Shape.TRIANGLE
 
 	# Check for square
-	if isSquare(simplified_points):
-		return SQUARE
+	if isSquare(simplifiedPoints):
+		return Shape.SQUARE
 
-	return UNKNOWN
+	return Shape.UNKNOWN
 	
+func getCenter(points:Array[Vector2]):
+	pass
+func isCircle(points:Array[Vector2], center:Vector2):
+	pass
+func isSpiral(points:Array[Vector2], center:Vector2):
+	pass
+func isTriangle(simplifiedPoints:Array[Vector2]):
+	pass
+func isSquare(simplifiedPoints:Array[Vector2]):
+	pass
 func RDP(points:Array[Vector2]):
-	# if theres only two points
+	# if theres two or less points
+	if points.size() <= 2:
 		# return points
-	# find the point w the greatest distance
+		return points
+	# find the point w the greatest perpendicular distance
 		# max dis
+	maxDistance = 0
 		# intex
+	maxIndex = 0
 	
 	# for loop to find max distance
-		# find vertical distance
-		# find horizontal distance
-		# find hypotenuse
+	for
+		# resert cur distance
+		curDistance = 0
+		
+		# calculate perp distance
+		
 		# if hypo is > than max then replace
+		if curDistance > maxDistance:
+			maxDistance = curDistance
+			maxIndex = i
 		
 	# check if max dist is within epsilon
+	if maxDistance <= rdpEpsilon
+		return[firstPoint,lastPoint]
 	# split graph and recersive
+	leftArr = 
+	rightArr
 	# combine arrays and return array
 	pass

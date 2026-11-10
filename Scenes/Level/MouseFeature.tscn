@@ -23,4 +23,6 @@ fireColor = null
 waterColor = null
 airColor = null
 earthColor = null
+unknownColor = null
 mouseState = null
+rdpEpsilon = null
