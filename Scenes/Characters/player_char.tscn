@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://blbvqvwu7i8x0"]
 
 [ext_resource type="Script" uid="uid://fxesjobnql1v" path="res://Scenes/Script/player.gd" id="1_mhe8w"]
+[ext_resource type="PackedScene" uid="uid://bb8v4fii6de45" path="res://Scenes/Characters/fireball.tscn" id="2_0ipqa"]
 [ext_resource type="Texture2D" uid="uid://djp6jwlan3fwh" path="res://Assets/Character/1 Pink_Monster/Pink_Monster_Idle_4.png" id="2_x6gc5"]
 [ext_resource type="Texture2D" uid="uid://cxbf1fbsxkg7d" path="res://Assets/Character/1 Pink_Monster/Pink_Monster_Jump_8.png" id="3_uco0n"]
 [ext_resource type="Texture2D" uid="uid://bxe8c3i3ev1lt" path="res://Assets/Character/1 Pink_Monster/Pink_Monster_Walk_6.png" id="4_irfk4"]
@@ -161,6 +162,7 @@ z_index = 2
 scale = Vector2(2, 2)
 collision_layer = 3
 script = ExtResource("1_mhe8w")
+projectile_prefab = ExtResource("2_0ipqa")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1998899664]
 sprite_frames = SubResource("SpriteFrames_17jnq")
@@ -181,3 +183,9 @@ drag_vertical_offset = -1.0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox" unique_id=520508906]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_kh5xa")
+
+[node name="FireballSpawnR" type="Marker2D" parent="." unique_id=1293196875]
+position = Vector2(15.5, 0)
+
+[node name="FireballSpawnL" type="Marker2D" parent="." unique_id=1849780303]
+position = Vector2(-15.5, 0)
