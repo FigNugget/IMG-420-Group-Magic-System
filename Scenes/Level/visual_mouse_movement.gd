@@ -28,6 +28,15 @@ var startMousePosition: Vector2
 var maxDistance: int
 var maxIndex: int
 var curDistance: int
+var firstPoint: Vector2
+var lastPoint: Vector2
+var curPoint: Vector2
+var line: Vector2
+var offset: Vector2
+@export var spiralTolerance:=5.0
+
+var leftArr: Array[Vector2] = []
+var rightArr: Array[Vector2] = []
 
 var color:= unknownColor
 var center:Vector2
@@ -123,16 +132,64 @@ func recognizeShape(points:Array[Vector2]):
 
 	return Shape.UNKNOWN
 	
-func getCenter(points:Array[Vector2]):
-	pass
-func isCircle(points:Array[Vector2], center:Vector2):
-	pass
+func getCenter(points:Array[Vector2])->Vector2:
+	
+	var curCenter = Vector2.ZERO
+	for point in points:
+		curCenter += point
+	curCenter /= points.size()
+	return curCenter
+func isCircle(points:Array[Vector2], center:Vector2)->bool:
+	if points.size() < 3:
+		return false
+	var distances: Array[float] = []
+	for point in points:
+		distances.append(point.distance_to(center))
+	var avg = 0.0
+	for distance in distances:
+		avg += distance
+	avg /= distances.size()
+	for distance in distances:
+		if abs(distance - avg) > rdpEpsilon:
+			return false
+	return true
 func isSpiral(points:Array[Vector2], center:Vector2):
-	pass
-func isTriangle(simplifiedPoints:Array[Vector2]):
-	pass
-func isSquare(simplifiedPoints:Array[Vector2]):
-	pass
+	if points.size() < 3:
+		return false
+	var distances: Array[float] = []
+	for point in points:
+		distances.append(point.distance_to(center))
+		
+	var increasing = 0
+
+	for i in range(distances.size()-1):
+		if distances[i+1] > distances[i]:
+			increasing += 1
+
+	if increasing < distances.size() * 0.8:
+		return false
+	var distanceChange: Array[float] = []
+	for i in range (distances.size()-1):
+		distanceChange.append(abs(distances[i+1]-distances[i]))
+	var avg = 0.0
+	for singleDistanceChange in distanceChange:
+		avg += singleDistanceChange
+	avg /= distanceChange.size()
+	for singleDistanceChange in distanceChange:
+		if abs(singleDistanceChange - avg) > avg * spiralTolerance:
+			return false
+	return true
+func isTriangle(points:Array[Vector2]) -> bool:
+	return points.size() == 3
+func isSquare(points:Array[Vector2]):
+	if points.size() != 4:
+		return false
+	for i in range(4):
+		var side1 = points[i].distance_to(points[(i+1)%4])
+		var side2 = points[(i+1)%4].distance_to(points[(i+2)%4])
+		if abs(side1-side2)>rdpEpsilon:
+			return false
+	return true
 func RDP(points:Array[Vector2]):
 	# if theres two or less points
 	if points.size() <= 2:
@@ -143,13 +200,18 @@ func RDP(points:Array[Vector2]):
 	maxDistance = 0
 		# intex
 	maxIndex = 0
-	
+	firstPoint = points[0]
+	lastPoint = points[points.size()-1]
+	# resert cur distance
+	curDistance = 0
 	# for loop to find max distance
-	for
-		# resert cur distance
-		curDistance = 0
+	for i in range(1,points.size()-1):
+		curPoint = points[i]
 		
 		# calculate perp distance
+		line = lastPoint - firstPoint
+		offset = curPoint - firstPoint
+		curDistance = abs(line.cross(offset))/line.length()
 		
 		# if hypo is > than max then replace
 		if curDistance > maxDistance:
@@ -157,10 +219,10 @@ func RDP(points:Array[Vector2]):
 			maxIndex = i
 		
 	# check if max dist is within epsilon
-	if maxDistance <= rdpEpsilon
+	if maxDistance <= rdpEpsilon:
 		return[firstPoint,lastPoint]
 	# split graph and recersive
-	leftArr = 
-	rightArr
+	leftArr = points.slice(0,maxIndex)
+	rightArr = points.slice(maxIndex, points.size()-1)
 	# combine arrays and return array
-	pass
+	return RDP(leftArr) + RDP(rightArr).slice(1,points.size()-1)
