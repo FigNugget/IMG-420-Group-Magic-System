@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bb8v4fii6de45"]
+
+[ext_resource type="Texture2D" uid="uid://c7jb303jcq3tc" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Fire_Ball/001.png" id="1_oaycv"]
+[ext_resource type="Script" uid="uid://cx6h0vwuetvgp" path="res://Scenes/Script/fireball.gd" id="1_ukkqq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_17jnq"]
+radius = 33.06055
+
+[node name="Fireball" type="Area2D" unique_id=1363063]
+script = ExtResource("1_ukkqq")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1269411392]
+texture = ExtResource("1_oaycv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=103152167]
+shape = SubResource("CircleShape2D_17jnq")
