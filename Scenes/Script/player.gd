@@ -9,6 +9,11 @@ var player_direction: Vector2
 @export var jump_speed := 430.0
 @export var gravity := 1350.0
 
+@export var projectile_prefab: PackedScene
+@onready var fireball_spawn_right: Marker2D = $FireballSpawnR
+@onready var fireball_spawn_left: Marker2D = $FireballSpawnL
+@onready var projectile_container: Node = $ProjectileContainer
+
 # Maximum number of footprints allowed.
 @export var max_footprints := 10
 # Spacing between consecutive footprints.
@@ -17,6 +22,7 @@ var player_direction: Vector2
 @export var footprint_lifetime := 2.0  # Time until disappearance
 # Scene for footprint instantiation.
 var footprint_scene = preload("res://Scenes/Items/footprint.tscn")
+var fireball_scene = preload("res://Scenes/Characters/fireball.tscn")
 
 @export var coyote_time := 0.62
 var coyote_left := 0.0
@@ -71,6 +77,16 @@ func _physics_process(delta: float) -> void:
 # Direction of the player's movement.
 
 func _process(delta):
+	if Input.is_action_just_pressed("shoot"):
+		var projectile = fireball_scene.instantiate() as Fireball
+		if $AnimatedSprite2D.flip_h:
+			projectile.global_position = fireball_spawn_left.global_position
+			projectile.direction_modifier = -1
+		else:
+			projectile.global_position = fireball_spawn_right.global_position
+		get_tree().current_scene.add_child(projectile)
+		#projectile_container.add_child(projectile)
+	
 # Only create footprints when moving.
 	if velocity.length() == 0:
 		return
@@ -85,6 +101,8 @@ func _process(delta):
 		time = 0.0
 		create_footprint()
 		clean_old_footprints()
+		
+
 
 func create_footprint():
 # Instantiate a footprint scene.
