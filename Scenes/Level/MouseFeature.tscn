@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://dwndkuxpyabcw"]
+
+[ext_resource type="Script" uid="uid://kibd6l65h26" path="res://Scenes/Level/visual_mouse_movement.gd" id="1_5udoj"]
+
+[node name="MouseFeature" type="Node2D" unique_id=1213941087]
+
+[node name="Label" type="Label" parent="." unique_id=1174852403]
+offset_right = 449.0
+offset_bottom = 106.0
+
+[node name="MouseTracer" type="CanvasLayer" parent="." unique_id=1052720887]
+
+[node name="VisualMouseMovement" type="Panel" parent="MouseTracer" unique_id=1403189578]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5udoj")
+dot_size = null
+background_color = null
+fireColor = null
+waterColor = null
+airColor = null
+earthColor = null
+unknownColor = null
+mouseState = null
+rdpEpsilon = null
+spiralTolerance = null
