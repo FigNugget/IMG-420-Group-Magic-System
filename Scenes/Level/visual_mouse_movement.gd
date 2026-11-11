@@ -15,7 +15,7 @@ extends Panel
 enum State {DRAWING, NOT_DRAWING}
 @export var mouseState = State.NOT_DRAWING
 
-enum Spell {FIRE, WATER, EARTH, AIR}
+enum Spell {FIRE, WATER, EARTH, AIR, UNKNOWN}
 enum Shape {TRIANGLE, CIRCLE, SQUARE, SPIRAL, UNKNOWN}
 var spell: Spell
 var simplifiedPoints: Array[Vector2] = []
@@ -25,20 +25,13 @@ var mousePosition: Vector2
 var startMousePosition: Vector2
 @export_range(1.0, 30.0, 0.5) var rdpEpsilon := 5.0
 
-var maxDistance: int
-var maxIndex: int
-var curDistance: int
-var firstPoint: Vector2
-var lastPoint: Vector2
-var curPoint: Vector2
-var line: Vector2
-var offset: Vector2
-@export var spiralTolerance:=5.0
 
-var leftArr: Array[Vector2] = []
-var rightArr: Array[Vector2] = []
+@export var spiralTolerance:=0.15
+
+
 
 var color:= unknownColor
+var shape:=Shape.UNKNOWN
 var center:Vector2
 func _gui_input(event) -> void:
 
@@ -53,19 +46,26 @@ func _gui_input(event) -> void:
 				mouseState = State.DRAWING
 
 				# Record starting position
+				drawingPoints.clear()
 				startMousePosition = event.position
 				
-				# change color based on what shape 
-				color = recognizeShape(drawingPoints)
-
+				drawingPoints.append(event.position)
+				
+				color = unknownColor
+				queue_redraw()
 		# Check for left mouse button release
 		elif event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
 
 			# Stop drawing
 			mouseState = State.NOT_DRAWING
 			# check type of drawing
-			spell = recognizeShape(drawingPoints)
+			shape = recognizeShape(drawingPoints)
+			
+			
 			# execute spell
+			spell = getSpell(shape)
+			color = getColor(shape)
+			queue_redraw()
 			castSpell(spell)
 			# Reset drawing
 			resetDrawing()
@@ -83,6 +83,30 @@ func _gui_input(event) -> void:
 				# Update the drawing
 				updateDrawing(mousePosition)
 				startMousePosition = mousePosition
+func getColor(shape)->Color:
+	match shape:
+		Shape.TRIANGLE:
+			return fireColor
+		Shape.CIRCLE:
+			return waterColor
+		Shape.SPIRAL:
+			return airColor
+		Shape.SQUARE:
+			return earthColor
+		_:
+			return unknownColor
+func getSpell(shape)->Spell:
+	match shape:
+		Shape.TRIANGLE:
+			return Spell.FIRE
+		Shape.CIRCLE:
+			return Spell.WATER
+		Shape.SPIRAL:
+			return Spell.AIR
+		Shape.SQUARE:
+			return Spell.EARTH
+		_:
+			return Spell.UNKNOWN
 func resetDrawing() -> void:
 	drawingPoints.clear()
 	queue_redraw()
@@ -98,7 +122,7 @@ func _draw() -> void:
 		draw_line(
 			drawingPoints[i],
 			drawingPoints[i+1],
-			fireColor,
+			color,
 			dot_size
 		)
 
@@ -107,13 +131,19 @@ func castSpell(spell:int):
 	pass
 	
 func recognizeShape(points:Array[Vector2]):
-
+	print("Original points: ", points.size())
+	print("Circle: ", isCircle(points, center))
+	print("Spiral: ", isSpiral(points, center))
+	print("Point count: ", points.size())
+	
 	# Simplify the drawing
 	simplifiedPoints = RDP(points)
 
 	# Get center of drawing
 	center = getCenter(points)
 
+	print("Simplified points: ", simplifiedPoints.size())
+	print("Center: ", center)
 	# Check for circle
 	if isCircle(points, center):
 		return Shape.CIRCLE
@@ -133,7 +163,8 @@ func recognizeShape(points:Array[Vector2]):
 	return Shape.UNKNOWN
 	
 func getCenter(points:Array[Vector2])->Vector2:
-	
+	if points.is_empty():
+		return Vector2.ZERO
 	var curCenter = Vector2.ZERO
 	for point in points:
 		curCenter += point
@@ -150,6 +181,8 @@ func isCircle(points:Array[Vector2], center:Vector2)->bool:
 		avg += distance
 	avg /= distances.size()
 	for distance in distances:
+		if not is_finite(distance):
+			return false
 		if abs(distance - avg) > rdpEpsilon:
 			return false
 	return true
@@ -166,7 +199,14 @@ func isSpiral(points:Array[Vector2], center:Vector2):
 		if distances[i+1] > distances[i]:
 			increasing += 1
 
-	if increasing < distances.size() * 0.8:
+	var totalRotation = 0.0
+
+	for i in range(points.size()-1):
+		var angle1 = (points[i] - center).angle()
+		var angle2 = (points[i+1] - center).angle()
+
+		totalRotation += wrapf(angle2-angle1, -PI, PI)
+	if abs(totalRotation) < TAU:
 		return false
 	var distanceChange: Array[float] = []
 	for i in range (distances.size()-1):
@@ -190,28 +230,29 @@ func isSquare(points:Array[Vector2]):
 		if abs(side1-side2)>rdpEpsilon:
 			return false
 	return true
-func RDP(points:Array[Vector2]):
+func RDP(points:Array[Vector2])->Array[Vector2]:
 	# if theres two or less points
 	if points.size() <= 2:
 		# return points
 		return points
 	# find the point w the greatest perpendicular distance
 		# max dis
-	maxDistance = 0
+	var maxDistance = 0
 		# intex
-	maxIndex = 0
-	firstPoint = points[0]
-	lastPoint = points[points.size()-1]
-	# resert cur distance
-	curDistance = 0
+	var maxIndex = 0
+	var firstPoint = points[0]
+	var lastPoint = points[points.size()-1]
+	var line = lastPoint - firstPoint
+	if line.length_squared() == 0:
+		return [firstPoint, lastPoint]
 	# for loop to find max distance
 	for i in range(1,points.size()-1):
-		curPoint = points[i]
+		var curPoint = points[i]
 		
 		# calculate perp distance
-		line = lastPoint - firstPoint
-		offset = curPoint - firstPoint
-		curDistance = abs(line.cross(offset))/line.length()
+		
+		var offset = curPoint - firstPoint
+		var curDistance = abs(line.cross(offset))/line.length()
 		
 		# if hypo is > than max then replace
 		if curDistance > maxDistance:
@@ -222,7 +263,17 @@ func RDP(points:Array[Vector2]):
 	if maxDistance <= rdpEpsilon:
 		return[firstPoint,lastPoint]
 	# split graph and recersive
-	leftArr = points.slice(0,maxIndex)
-	rightArr = points.slice(maxIndex, points.size()-1)
-	# combine arrays and return array
-	return RDP(leftArr) + RDP(rightArr).slice(1,points.size()-1)
+	var leftArr: Array[Vector2] = []
+	var rightArr: Array[Vector2] = []
+	for i in range(maxIndex + 1):
+		leftArr.append(points[i])
+
+	for i in range(maxIndex, points.size()):
+		rightArr.append(points[i])
+
+	var result: Array[Vector2] = RDP(leftArr)
+	var rightResult: Array[Vector2] = RDP(rightArr)
+
+	for i in range(1, rightResult.size()):
+		result.append(rightResult[i])
+	return result
