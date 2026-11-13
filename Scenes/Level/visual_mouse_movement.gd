@@ -23,7 +23,8 @@ var simplifiedPoints: Array[Vector2] = []
 var drawingPoints: Array[Vector2] = []
 var mousePosition: Vector2
 var startMousePosition: Vector2
-@export_range(1.0, 30.0, 0.5) var rdpEpsilon := 5.0
+@export_range(1.0, 30.0, 0.5) var rdpEpsilon := 20
+var circleEpsilon := 40
 
 
 @export var spiralTolerance:=0.15
@@ -33,56 +34,34 @@ var startMousePosition: Vector2
 var color:= unknownColor
 var shape:=Shape.UNKNOWN
 var center:Vector2
-func _gui_input(event) -> void:
-
-	# Check if a mouse button was pressed or released
+func _gui_input(event):
+	# Check for left mouse button press
 	if event is InputEventMouseButton:
-
-		# Check for left mouse button press
-		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-
-			if mouseState == State.NOT_DRAWING:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if event.pressed:
 				# Start drawing
 				mouseState = State.DRAWING
-
 				# Record starting position
 				drawingPoints.clear()
-				startMousePosition = event.position
-				
 				drawingPoints.append(event.position)
-				
-				color = unknownColor
-				queue_redraw()
-		# Check for left mouse button release
-		elif event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-
-			# Stop drawing
-			mouseState = State.NOT_DRAWING
-			# check type of drawing
-			shape = recognizeShape(drawingPoints)
-			
-			
-			# execute spell
-			spell = getSpell(shape)
-			color = getColor(shape)
-			queue_redraw()
-			castSpell(spell)
-			# Reset drawing
-			resetDrawing()
-
-
+			else:
+				if mouseState == State.DRAWING:
+					mouseState = State.NOT_DRAWING
+					# recognize shape
+					shape = recognizeShape(drawingPoints)
+					# execute spell
+					spell = getSpell(shape)
+					color = getColor(shape)
+					queue_redraw()
+					castSpell(spell)
+					# Reset drawing
+					resetDrawing()
 	# Check if mouse is moving
 	if event is InputEventMouseMotion:
 
 		if mouseState == State.DRAWING:
-
-			# Get current mouse position
-			mousePosition = event.position
-
-			if mousePosition != startMousePosition:
-				# Update the drawing
-				updateDrawing(mousePosition)
-				startMousePosition = mousePosition
+			drawingPoints.append(event.position)
+			queue_redraw()
 func getColor(shape)->Color:
 	match shape:
 		Shape.TRIANGLE:
@@ -132,8 +111,6 @@ func castSpell(spell:int):
 	
 func recognizeShape(points:Array[Vector2]):
 	print("Original points: ", points.size())
-	print("Circle: ", isCircle(points, center))
-	print("Spiral: ", isSpiral(points, center))
 	print("Point count: ", points.size())
 	
 	# Simplify the drawing
@@ -141,9 +118,23 @@ func recognizeShape(points:Array[Vector2]):
 
 	# Get center of drawing
 	center = getCenter(points)
+	
+	if points.size() < 3:
+		return Shape.UNKNOWN
+	if points[0].distance_to(points[-1])<50:
+		points.append(points[0])
 
 	print("Simplified points: ", simplifiedPoints.size())
 	print("Center: ", center)
+	
+	print("Circle: ", isCircle(points, center))
+	print("Spiral: ", isSpiral(points, center))
+	
+	print("Triangle: ", isTriangle(simplifiedPoints))
+	print("Square: ", isSquare(simplifiedPoints))
+	
+	
+	
 	# Check for circle
 	if isCircle(points, center):
 		return Shape.CIRCLE
@@ -183,7 +174,7 @@ func isCircle(points:Array[Vector2], center:Vector2)->bool:
 	for distance in distances:
 		if not is_finite(distance):
 			return false
-		if abs(distance - avg) > rdpEpsilon:
+		if abs(distance - avg) > circleEpsilon:
 			return false
 	return true
 func isSpiral(points:Array[Vector2], center:Vector2):
@@ -196,8 +187,8 @@ func isSpiral(points:Array[Vector2], center:Vector2):
 	var increasing = 0
 
 	for i in range(distances.size()-1):
-		if distances[i+1] > distances[i]:
-			increasing += 1
+		if increasing < (distances.size() - 1) * 0.7:
+			return false
 
 	var totalRotation = 0.0
 
@@ -225,9 +216,11 @@ func isSquare(points:Array[Vector2]):
 	if points.size() != 4:
 		return false
 	for i in range(4):
-		var side1 = points[i].distance_to(points[(i+1)%4])
-		var side2 = points[(i+1)%4].distance_to(points[(i+2)%4])
-		if abs(side1-side2)>rdpEpsilon:
+		var side1 = points[(i+1)%4] - points[i]
+		var side2 = points[(i+2)%4] - points[(i+1)%4]
+		if abs(side1.length()-side2.length())>rdpEpsilon:
+			return false
+		if abs(side1.normalized().dot(side2.normalized()))>0.2:
 			return false
 	return true
 func RDP(points:Array[Vector2])->Array[Vector2]:
