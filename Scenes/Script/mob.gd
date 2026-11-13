@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 @onready var player_node: CharacterBody2D = get_parent().get_node("PlayerChar")
+@onready var texture_progress_bar: TextureProgressBar = $TextureProgressBar
 
 @export var health: int = 3
 
@@ -82,3 +83,27 @@ func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body == player_node:
 		GameController.health_deplete(health)
 		get_tree().call_deferred("reload_current_scene")
+
+func connect_signals() -> void:
+	$Area2D.connect("body_entered", decrease_life_pts)
+	texture_progress_bar.connect("value_changed", healthbar_changed)
+	
+func decrease_life_pts(area: Area2D) -> void:
+	if area is Fireball:
+		texture_progress_bar.value -= 1
+		area.queue_free()
+		
+func healthbar_changed(value: float) -> void:
+	if value == 0:
+		queue_free()
+
+#func _on_fireball_body_entered(body: Node2D) -> void:
+	#if body == Fireball:
+		#queue_free()
+		
+		
+func _ready() -> void:
+	add_to_group("enemies")
+	
+	
+#https://www.youtube.com/watch?v=8S9SMO6C6jU

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://26wdxaiuc2f7" path="res://Assets/Art/BG_04.png" id="2_vkpeg"]
 [ext_resource type="PackedScene" uid="uid://dvxcx81uqv5fe" path="res://Scenes/UI/coin_ui.tscn" id="7_7rary"]
 [ext_resource type="PackedScene" uid="uid://blbvqvwu7i8x0" path="res://Scenes/Characters/player_char.tscn" id="7_74wln"]
+[ext_resource type="PackedScene" uid="uid://bb8v4fii6de45" path="res://Scenes/Characters/fireball.tscn" id="8_kh5xa"]
 [ext_resource type="PackedScene" uid="uid://cdlfggytovudj" path="res://Scenes/UI/health_ui.tscn" id="8_s3phw"]
 [ext_resource type="PackedScene" uid="uid://bpe0f1jb3m826" path="res://Scenes/Characters/mob2.tscn" id="9_8bj3x"]
 [ext_resource type="PackedScene" uid="uid://b14j8w5uho1sa" path="res://Scenes/Items/coin.tscn" id="11_m23wj"]
@@ -35,6 +36,7 @@ shape = SubResource("RectangleShape2D_17jnq")
 [node name="Mob" parent="." unique_id=450592903 instance=ExtResource("9_8bj3x")]
 position = Vector2(670, 557)
 scale = Vector2(2, 2)
+health = 3
 
 [node name="coin" parent="." unique_id=1451490080 instance=ExtResource("11_m23wj")]
 position = Vector2(296, 0)
@@ -46,3 +48,7 @@ position = Vector2(337.00003, 0)
 position = Vector2(126, 554)
 
 [node name="ProjectileContainer" type="Node2D" parent="." unique_id=560317461]
+
+[node name="Fireball" parent="." unique_id=1363063 instance=ExtResource("8_kh5xa")]
+
+[connection signal="body_entered" from="Fireball" to="Mob" method="_on_fireball_body_entered"]

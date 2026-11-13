@@ -82,6 +82,7 @@ func _process(delta):
 		if $AnimatedSprite2D.flip_h:
 			projectile.global_position = fireball_spawn_left.global_position
 			projectile.direction_modifier = -1
+
 		else:
 			projectile.global_position = fireball_spawn_right.global_position
 		get_tree().current_scene.add_child(projectile)
