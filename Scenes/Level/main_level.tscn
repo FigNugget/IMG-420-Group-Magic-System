@@ -36,7 +36,6 @@ shape = SubResource("RectangleShape2D_17jnq")
 [node name="Mob" parent="." unique_id=450592903 instance=ExtResource("9_8bj3x")]
 position = Vector2(670, 557)
 scale = Vector2(2, 2)
-health = 3
 
 [node name="coin" parent="." unique_id=1451490080 instance=ExtResource("11_m23wj")]
 position = Vector2(296, 0)

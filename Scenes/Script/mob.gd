@@ -96,14 +96,18 @@ func decrease_life_pts(area: Area2D) -> void:
 func healthbar_changed(value: float) -> void:
 	if value == 0:
 		queue_free()
+		
+func take_damage(amount: int = 1) -> void:
+	texture_progress_bar.value = max(texture_progress_bar.value - amount, 0)
 
 #func _on_fireball_body_entered(body: Node2D) -> void:
 	#if body == Fireball:
 		#queue_free()
 		
-		
+
 func _ready() -> void:
 	add_to_group("enemies")
-	
+	texture_progress_bar.value_changed.connect(healthbar_changed)
+	texture_progress_bar.value = health
 	
 #https://www.youtube.com/watch?v=8S9SMO6C6jU

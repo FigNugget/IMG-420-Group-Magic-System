@@ -162,7 +162,6 @@ radius = 68.06615
 
 [node name="Mob" type="CharacterBody2D" unique_id=450592903]
 script = ExtResource("1_ojy5y")
-health = null
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1603726743]
 sprite_frames = SubResource("SpriteFrames_17jnq")
@@ -202,14 +201,15 @@ target_position = Vector2(4, 0)
 shape = SubResource("CircleShape2D_17jnq")
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="." unique_id=497508028]
-offset_left = -9.0
-offset_top = -20.0
-offset_right = 7.0
-offset_bottom = -15.0
+offset_left = -8.0
+offset_top = -16.0
+offset_right = 8.0
+offset_bottom = -11.0
+scale = Vector2(1, 0.575)
 max_value = 3.0
 value = 3.0
 texture_under = ExtResource("5_pcspv")
-texture_over = ExtResource("6_e0u26")
+texture_progress = ExtResource("6_e0u26")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_entered" from="Area2D_chase" to="." method="_on_area_2d_chase_body_entered"]
