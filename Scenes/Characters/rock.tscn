@@ -1,0 +1,60 @@
+[gd_scene format=3 uid="uid://dy5fwjvhtuyyh"]
+
+[ext_resource type="Script" uid="uid://dxjg0argnuylu" path="res://Scenes/Script/rock.gd" id="1_6cna1"]
+[ext_resource type="Texture2D" uid="uid://cyy437bhdgard" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/001.png" id="2_0k1vq"]
+[ext_resource type="Texture2D" uid="uid://d2wf641e1qsgg" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/002.png" id="3_rkl2i"]
+[ext_resource type="Texture2D" uid="uid://dcb2eynegtul" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/003.png" id="4_57b4i"]
+[ext_resource type="Texture2D" uid="uid://b5l6bae7tlt6n" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/004.png" id="5_bx0lw"]
+[ext_resource type="Texture2D" uid="uid://clhggxbc6jdpm" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/005.png" id="6_7b6y6"]
+[ext_resource type="Texture2D" uid="uid://bxd6hqeig0hmm" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/006.png" id="7_6pxh4"]
+[ext_resource type="Texture2D" uid="uid://nxbmt8yjij4e" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/007.png" id="8_870g0"]
+[ext_resource type="Texture2D" uid="uid://bgla0k8mogycg" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/008.png" id="9_qiftq"]
+[ext_resource type="Texture2D" uid="uid://cqhhjh6dtojsm" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Earth_Spike/009.png" id="10_uw2rw"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hhbo3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_0k1vq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_rkl2i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_57b4i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_bx0lw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_7b6y6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_6pxh4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_870g0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_qiftq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_uw2rw")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0b4ht"]
+size = Vector2(43, 10)
+
+[node name="Area2D" type="Area2D" unique_id=698783382]
+script = ExtResource("1_6cna1")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=655820375]
+sprite_frames = SubResource("SpriteFrames_hhbo3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1902307741]
+position = Vector2(1.5, 27)
+shape = SubResource("RectangleShape2D_0b4ht")

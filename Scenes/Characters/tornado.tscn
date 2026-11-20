@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://bktkgx2h1d0bb"]
+
+[ext_resource type="Script" uid="uid://cbdp750en2a7k" path="res://Scenes/Script/tornado.gd" id="1_qt2n4"]
+[ext_resource type="Texture2D" uid="uid://chkab65482sbf" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/001.png" id="2_2u7c3"]
+[ext_resource type="Texture2D" uid="uid://bit44rp35dtnx" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/002.png" id="3_no85f"]
+[ext_resource type="Texture2D" uid="uid://cgmxnvqjbn0mk" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/003.png" id="4_7vp57"]
+[ext_resource type="Texture2D" uid="uid://svebtu4p51fm" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/004.png" id="5_bwkmc"]
+[ext_resource type="Texture2D" uid="uid://cvtdtikyaslf8" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/005.png" id="6_lh1qk"]
+[ext_resource type="Texture2D" uid="uid://syjq8hado1qx" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/006.png" id="7_jtiel"]
+[ext_resource type="Texture2D" uid="uid://c8s0jdbrkmbpb" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/007.png" id="8_jhkyb"]
+[ext_resource type="Texture2D" uid="uid://djuyjpcimomw1" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/008.png" id="9_e3sqn"]
+[ext_resource type="Texture2D" uid="uid://daca7656kyans" path="res://Assets/Art/Foozle_2DE0001_Pixel_Magic_Effects/Foozle_2DE0001_Pixel_Magic_Effects/Tornado/009.png" id="10_i3jlb"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_r5hs6"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_2u7c3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_no85f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_7vp57")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_bwkmc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_lh1qk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_jtiel")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_jhkyb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_e3sqn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_i3jlb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_e3sqn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_jhkyb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_jtiel")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_lh1qk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_bwkmc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_7vp57")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_no85f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_2u7c3")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 12.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3cvko"]
+size = Vector2(38, 53)
+
+[node name="Area2D" type="Area2D" unique_id=1862127109]
+script = ExtResource("1_qt2n4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=543884667]
+sprite_frames = SubResource("SpriteFrames_r5hs6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1065998587]
+position = Vector2(0, 5.5)
+shape = SubResource("RectangleShape2D_3cvko")

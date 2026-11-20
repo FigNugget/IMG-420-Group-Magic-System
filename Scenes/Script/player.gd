@@ -23,6 +23,8 @@ var player_direction: Vector2
 # Scene for footprint instantiation.
 var footprint_scene = preload("res://Scenes/Items/footprint.tscn")
 var fireball_scene = preload("res://Scenes/Characters/fireball.tscn")
+var tornado_scene = preload("res://Scenes/Characters/tornado.tscn")
+var rock_scene = preload("res://Scenes/Characters/rock.tscn")
 
 @export var coyote_time := 0.62
 var coyote_left := 0.0
@@ -87,6 +89,33 @@ func _process(delta):
 			projectile.global_position = fireball_spawn_right.global_position
 		get_tree().current_scene.add_child(projectile)
 		#projectile_container.add_child(projectile)
+		
+	# add input check for casting tornado
+	if Input.is_action_just_pressed("cast_tornado"):
+		var tornado = tornado_scene.instantiate() as Tornado
+		if $AnimatedSprite2D.flip_h:
+			tornado.global_position = fireball_spawn_left.global_position
+			tornado.direction_modifier = -1
+			
+		else:
+			tornado.global_position = fireball_spawn_right.global_position
+		get_tree().current_scene.add_child(tornado)
+		
+	# add input for casting rock spell in both right and left directions
+	# at the same time
+	if Input.is_action_just_pressed("cast_rock"):
+		# Shoot right
+		var rock_right = rock_scene.instantiate() as Rock
+		rock_right.global_position = global_position
+		rock_right.direction_modifier = 1
+		get_tree().current_scene.add_child(rock_right)
+
+		# Shoot left
+		var rock_left = rock_scene.instantiate() as Rock
+		rock_left.global_position = global_position
+		rock_left.direction_modifier = -1
+		get_tree().current_scene.add_child(rock_left)
+
 	
 # Only create footprints when moving.
 	if velocity.length() == 0:
